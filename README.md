@@ -4,17 +4,18 @@ Backend API for Claims Solutions
 ## Data Objects
 ### Company
 #### Fields
-- Name
-  * Required
-  * Unique
-- Phone
-- Address 1
-- Address 2
-- City
-- State
-- Zip
+| Field Name | Attributes       |
+| -----------| -----------------|
+| Name       | Required, Unique |
+| Phone      |                  |
+| Address 1  |                  |
+| Address 2  |                  |
+| City       |                  |
+| State      |                  |
+| Zip        |                  |
 
 #### JSON Request Format
+```
 {
     "phone": "...",
     "address_1": "...",
@@ -23,6 +24,7 @@ Backend API for Claims Solutions
     "state": "...",
     "zip": "..."
 }
+```
 
 ## Features
 ### Company
@@ -32,11 +34,11 @@ HTTP POST method --> URL/company/Company Name
 
 #### Get
 ##### By Name
-HTTP GET method --> URL/company/Company Name
+HTTP **GET** method --> URL/company/Company Name
 
 ##### Company List
-HTTP GET method --> URL/companies
+HTTP **GET** method --> URL/companies
 
 #### Delete
 ##### By Name
-HTTP DEL method --> URL/company/Company Name
+HTTP **DEL** method --> URL/company/Company Name
