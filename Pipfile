@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+marshmallow = "*"
+Flask = "*"
+Flask-JWT-Extended = "*"
+Flask-RESTful = "*"
+Flask-SQLAlchemy = "*"
+flask-marshmallow = "*"
+marshmallow-sqlalchemy = "*"
+
+[dev-packages]
+
+[requires]
+python_vesion = "3.9"
