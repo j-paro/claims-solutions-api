@@ -30,7 +30,7 @@ Backend API for Claims Solutions
 ### Company
 #### Create
 ##### By Name
-HTTP POST method --> URL/company/Company Name
+HTTP **POST** method --> URL/company/Company Name
 
 #### Get
 ##### By Name
@@ -42,3 +42,10 @@ HTTP **GET** method --> URL/companies
 #### Delete
 ##### By Name
 HTTP **DEL** method --> URL/company/Company Name
+
+## To-Do
+### User
+- Hash passwords that get saved and read from database
+### Config
+- Development section
+- Production section
