@@ -11,6 +11,10 @@ Flask-RESTful = "*"
 Flask-SQLAlchemy = "*"
 flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
+sqlalchemy-utils = "*"
+flask-migrate = "*"
+python-dotenv = "*"
+requests = "*"
 
 [dev-packages]
 

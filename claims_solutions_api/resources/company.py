@@ -1,10 +1,12 @@
-from flask_restful import Resource
 from flask import request
+from flask_restful import Resource
+from flask_jwt_extended import get_jwt_identity, jwt_required
+from claims_solutions_api.models import company
 
-from schemas.company import CompanySchema
-from models.company import CompanyModel
-from resources.messages import SuccessMessage
-from errors import (
+from claims_solutions_api.schemas.company import CompanySchema
+from claims_solutions_api.models.company import CompanyModel
+from claims_solutions_api.messages import SuccessMessage
+from claims_solutions_api.errors import (
     InternalServerError,
     CompanyAlreadyExistsError,
     CompanyNotExistsError
@@ -14,19 +16,21 @@ company_schema = CompanySchema()
 company_schema_list = CompanySchema(many=True)
 
 class Company(Resource):
-    @classmethod    
+    @classmethod
+    @jwt_required()
     def get(cls, name):
         company = CompanyModel.find_by_name(name)
         if company:
             return SuccessMessage(
                 "company",
                 name,
-                "insert",
+                "search",
                 company_schema.dump(company)
-            ).__dict__, 200
+            ).get_msg(), 200
         raise CompanyNotExistsError
 
-    @classmethod    
+    @classmethod
+    @jwt_required(fresh=True)
     def post(cls, name: str):
         if CompanyModel.find_by_name(name):
             return CompanyAlreadyExistsError
@@ -49,9 +53,10 @@ class Company(Resource):
             name,
             "insert",
             company_schema.dump(company)
-        ).__dict__, 201
+        ).get_msg(), 201
 
-    @classmethod    
+    @classmethod
+    @jwt_required(fresh=True)
     def delete(cls, name: str):
         company = CompanyModel.find_by_name(name)
         if company:
@@ -65,15 +70,32 @@ class Company(Resource):
             name,
             "insert",
             company_schema.dump(company)
-        ).__dict__, 200
+        ).get_msg(), 200
 
 
 class CompanyList(Resource):
-    @classmethod    
+    @classmethod
+    @jwt_required(optional=True)
     def get(cls):
+        user_id = get_jwt_identity()
+        print(f"user id: {user_id}")
+        companies = company_schema_list.dump(CompanyModel.find_all())
+
+        if user_id:
+            data = {
+                "companies": companies
+            }
+        else:
+            company_names = []
+            for company in companies:
+                company_names.append(company['name'])
+            data= {
+                "companies": company_names
+            }
+
         return SuccessMessage(
             "company",
             "company list",
             "list",
-            {"companies": company_schema_list.dump(CompanyModel.find_all())}
-        ).__dict__, 200
+            data
+        ).get_msg(), 200

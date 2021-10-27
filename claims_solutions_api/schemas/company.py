@@ -1,5 +1,5 @@
-from ma import ma
-from models.company import CompanyModel
+from claims_solutions_api.schemas import ma
+from claims_solutions_api.models.company import CompanyModel
 
 
 class CompanySchema(ma.SQLAlchemyAutoSchema):

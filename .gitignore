@@ -103,6 +103,7 @@ celerybeat.pid
 
 # Environments
 .env
+.flaskenv
 .venv
 env/
 venv/
@@ -133,3 +134,9 @@ dmypy.json
 
 # keys
 keys
+
+# sqlite3 database
+data.db
+
+# Deprecated Code
+deprecated/

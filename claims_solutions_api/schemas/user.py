@@ -1,18 +1,11 @@
 from marshmallow import validate
 from marshmallow.fields import String
 
-from ma import ma
-from models.user import UserModel
+from claims_solutions_api.schemas import ma
 
 
-class UserSchema(ma.SQLAlchemySchema):
-    class Meta:
-        model = UserModel
-        load_only = ("password",)
-        dump_only = ("id", "activated")
-        load_instance = True
+class UserSchema(ma.Schema):
 
-    id = ma.auto_field()
     username = String(
         required=True,
         validate=validate.Length(
@@ -24,8 +17,14 @@ class UserSchema(ma.SQLAlchemySchema):
     password = String(
         required=True,
         validate=validate.Length(
-            min=1,
+            min=4,
             error="'username' doesn't comply with length requirment."
         )
     )
-    activated = ma.auto_field()
+    email = String(
+        validate=validate.Length(
+            max=80,
+            error="'username' doesn't comply with length requirment."
+        )
+    )
+    

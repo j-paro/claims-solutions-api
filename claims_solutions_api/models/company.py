@@ -1,7 +1,6 @@
-from enum import unique
 from typing import List
 
-from db import db
+from claims_solutions_api.models import db
 
 
 class CompanyModel(db.Model):
