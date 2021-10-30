@@ -21,7 +21,7 @@ class ExpiredTokenError(HTTPException):
 class InvalidTokenError(HTTPException):
     pass
 
-class MisssingTokenError(HTTPException):
+class MissingTokenError(HTTPException):
     pass
 
 class RevokedTokenError(HTTPException):
@@ -31,6 +31,15 @@ class StaleTokenError(HTTPException):
     pass
 
 class UserNotFoundError(HTTPException):
+    pass
+
+class IllegalImageError(HTTPException):
+    pass
+
+class IllegalFilenameError(HTTPException):
+    pass
+
+class ImageNotFoundError(HTTPException):
     pass
 
 errors = {
@@ -62,7 +71,7 @@ errors = {
         "message": "Signature verification failed",
         "status": 401
     },
-    "MisssingTokenError": {
+    "MissingTokenError": {
         "message": "Missing access token",
         "status": 401
     },
@@ -77,5 +86,17 @@ errors = {
     "UserNotFoundError": {
         "message": "User not found",
         "status": 401
+    },
+    "IllegalImageError": {
+        "message": "Illegal image format",
+        "status": 400
+    },
+    "IllegalFilenameError": {
+        "message": "Illegal filename",
+        "status": 400
+    },
+    "ImageNotFoundError": {
+        "message": "Image not found",
+        "status": 404
     }
 }

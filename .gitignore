@@ -140,3 +140,6 @@ data.db
 
 # Deprecated Code
 deprecated/
+
+.ignore/
+images/

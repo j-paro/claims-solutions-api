@@ -1,43 +1,60 @@
 import logging
+import os
 import sys
 from flask import Flask
 from flask_migrate import Migrate
+from flask_uploads import configure_uploads, patch_request_class
 
 from claims_solutions_api.models import db
 from claims_solutions_api.models.blacklisted_token import BlacklistedToken
 from claims_solutions_api.resources import api
 from claims_solutions_api.schemas import ma
 from claims_solutions_api.security import jwt
-from claims_solutions_api.settings import DevelopmentConfig, ProductionConfig
+from claims_solutions_api.settings import (
+    DevelopmentConfig,
+    ProductionConfig,
+    TestingConfig
+)
+from claims_solutions_api.libs.image_helper import IMAGE_SET
 from claims_solutions_api.errors import (
     ExpiredTokenError,
     InvalidTokenError,
-    MisssingTokenError,
+    MissingTokenError,
     StaleTokenError,
     RevokedTokenError
 )
 
 def create_app():
     app = Flask(__name__.split('.')[0])
-    if app.config['ENV'] == 'development':
-        app.config.from_object(DevelopmentConfig)
-    else:
-        app.config.from_object(ProductionConfig)
+    
+    configure_app(app)
     register_extensions(app)
     configure_logger(app)
     return app
 
 
-def register_extensions(app):
+def configure_app(app: Flask):
+    if app.config['ENV'] == 'development':
+        app.config.from_object(DevelopmentConfig)
+    elif app.config['ENV'] == 'testing':
+        app.config.from_object(TestingConfig)
+    else:
+        app.config.from_object(ProductionConfig)
+    #
+    # This sets the max size to the default: 64 MB
+    #
+    patch_request_class(app)
+    configure_uploads(app, IMAGE_SET)
+
+
+def register_extensions(app: Flask):
     """Register Flask extensions."""
     db.init_app(app)
     Migrate(app, db, render_as_batch=True)
     ma.init_app(app)
     api.init_app(app)
-
     jwt.init_app(app)
     set_jwt_loaders()
-    
     return None
 
 def set_jwt_loaders():
@@ -64,7 +81,7 @@ def set_jwt_loaders():
 
     @jwt.unauthorized_loader
     def missing_token_callback(error):
-        raise MisssingTokenError
+        raise MissingTokenError
     
     @jwt.needs_fresh_token_loader
     def token_not_fresh_callback(jwt_header, jwt_payload):
@@ -80,7 +97,7 @@ def set_jwt_loaders():
         return BlacklistedToken.find_by_jti(jti)
 
 
-def configure_logger(app):
+def configure_logger(app: Flask):
     """Configure loggers."""
     handler = logging.StreamHandler(sys.stdout)
     if not app.logger.handlers:
