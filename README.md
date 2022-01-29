@@ -17,12 +17,12 @@ Backend API for Claims Solutions
 #### JSON Request Format
 ```
 {
-    "phone": "...",
-    "address_1": "...",
-    "address_2": "...",
-    "city": "...",
-    "state": "...",
-    "zip": "..."
+    phone: <data>,
+    address_1: <data>,
+    address_2: <data>,
+    city: <data>,
+    state: <data>,
+    zip: <data>
 }
 ```
 
